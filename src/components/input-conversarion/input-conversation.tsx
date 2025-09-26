@@ -21,7 +21,7 @@ export default function InputConversation() {
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLoadingAttachment(prev => true);
+        setLoadingAttachment(true);
         if (event.target.files) {
             const newFile: File[] = Array.from(event.target.files)
             setFile(newFile);
@@ -43,12 +43,12 @@ export default function InputConversation() {
             const data = await res.json();
             setTextFile(data.text);
         }
-        setLoadingAttachment(prev => false);
+        setLoadingAttachment(false);
     }
 
     const handleSend = async () => {
         if (file && textFile !== "") {
-            setLoadingAI(prev => true);
+            setLoadingAI(true);
             setConversation(prev => [...prev, { role: "user", content: textAreaContent, time: new Date() }])
             setTextAreaContent("");
 
@@ -68,7 +68,7 @@ export default function InputConversation() {
             const { answer } = await res.json();
             console.log("Resposta",answer);
             setConversation(prev => [...prev, { role: "assistant", content: answer, time: new Date() }])
-            setLoadingAI(prev => false);
+            setLoadingAI(false);
         } else {
             setConversation(prev => [...prev, { role: "assistant", content: 'Envie um documento PDF para que eu possa responder!', time: new Date()}])
         }

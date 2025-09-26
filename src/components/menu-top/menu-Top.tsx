@@ -2,7 +2,6 @@
 
 import { useTheme } from "@/shared/useContext/themeContext";
 import { Brain, Moon, Sun } from "lucide-react";
-import Image from "next/image";
 
 export default function MenuTop() {
     const { theme, toggleTheme } = useTheme();
