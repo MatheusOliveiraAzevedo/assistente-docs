@@ -16,3 +16,29 @@ Projeto construido para facilitar a extração de informações de PDFs, princip
 [Visualizar o projeto!](https://assistente-docs.vercel.app/)
 
 ![Previa do DocAI](public/assets/screenshot.png)
+
+## Instalação
+
+```bash
+git clone https://github.com/MatheusOliveiraAzevedo/assistente-docs.git
+cd assistente-docs
+npm install
+npm run dev
+```
+
+## Instruções de uso
+
+Ao abrir a tela do DocAI, você vera na base da tela um campo de input de texto, e a direita um botão de anexo. 
+
+Clique em ***Anexo***, escolha um arquivo .pdf para que o assistente possa te auxiliar. 
+
+Depois do arquivo carregado, você só precisa escrever uma pergunta sobre o documento no campo de texto e clicar em ***Enviar***, ou pressionar a tecla ***Enter***
+
+Você vera na tela a resposta do assistente escrita no campo logo acima do input de texto, onde as suas perguntas foram registradas.
+
+## Técnologias utilizadas
+
+- React.js
+- Next.js
+- Tailwind CSS
+- TypeScript
