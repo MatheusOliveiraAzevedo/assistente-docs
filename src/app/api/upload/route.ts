@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import pdf from "pdf-parse/lib/pdf-parse.js";
 import { NextResponse } from 'next/server';
 export const runtime = "nodejs";
@@ -24,8 +24,10 @@ export async function POST(req: Request) {
             pages: data.numPages,
             info: data.info
         })
-    } catch (error: any) {
-        console.error("Upload error",error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+        return NextResponse.json({ error: "Erro desconhecido" }, { status: 500 });
     }
 }

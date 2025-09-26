@@ -4,8 +4,7 @@ type ButtonDefaultProps = {
     children: ReactNode,
     type?: 'primary' | 'secondary',
     size?: 'sm' | 'lg',
-    onClick?: () => void,
-    ref?: any
+    onClick?: () => void
 }
 
 function ButtonDefaultBase( { children, type='primary', size='sm', onClick }: ButtonDefaultProps, ref: React.Ref<HTMLButtonElement> ) {

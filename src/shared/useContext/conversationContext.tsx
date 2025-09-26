@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
 type RoleType = 'user' | 'assistant'
 export type ConversationType = {
@@ -12,9 +12,13 @@ type ConversarionContextType = {
     setConversation: React.Dispatch<React.SetStateAction<ConversationType[]>>
 }
 
+type ConversationProviderProps = {
+    children: ReactNode
+}
+
 const ConversarionContext = createContext<ConversarionContextType | undefined>(undefined);
 
-export function ConversationProvider({ children }: any) {
+export function ConversationProvider({ children }: ConversationProviderProps) {
     const [conversation, setConversation] = useState<ConversationType[]>([]);
 
     return (
