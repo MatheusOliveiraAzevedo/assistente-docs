@@ -1,4 +1,4 @@
-// @ts-expect-error
+// @ts-expect-error: pdf-parse não fornece tipagem oficial em TS
 import pdf from "pdf-parse/lib/pdf-parse.js";
 import { NextResponse } from 'next/server';
 export const runtime = "nodejs";
