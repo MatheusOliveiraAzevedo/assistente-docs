@@ -7,6 +7,7 @@ import { useConversation } from "@/shared/useContext/conversationContext";
 import Spinner from "../spinner/spinner";
 import { useLoader } from "@/shared/useContext/loaderContext";
 import { useTheme } from "@/shared/useContext/themeContext";
+import { uploadPDF } from "@/shared/lib/uploadPDF";
 
 export default function InputConversation() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -28,24 +29,14 @@ export default function InputConversation() {
         if (event.target.files) {
             const newFile: File[] = Array.from(event.target.files)
             setFile(newFile);
-
-            const formData = new FormData();
-            formData.append('file', newFile[0]);
-
-            const res = await fetch("/api/upload", {
-                method: "POST",
-                body: formData
-            });
-
-            if (!res.ok) {
+            try {
+                const res = await uploadPDF(newFile[0])
+                setTextFile(res.text);
+                setConversation(prev => [...prev, { role: "attachment", content: `Arquivo enviado: ${newFile[0].name}`, time: new Date()}])
+            } catch (error) {
                 setConversation(prev => [...prev, { role: "error", content: 'Erro ao enviar o arquivo. Envie um documento PDF valido!', time: new Date()}])
                 setLoadingLoader(false);
-                return;
             }
-            setConversation(prev => [...prev, { role: "attachment", content: `Arquivo enviado: ${newFile[0].name}`, time: new Date()}])
-
-            const data = await res.json();
-            setTextFile(data.text);
         }
         setLoadingLoader(false);
     }
