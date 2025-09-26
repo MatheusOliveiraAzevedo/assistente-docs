@@ -21,9 +21,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme') as Theme;
-        if (savedTheme) setTheme(savedTheme);
+        if (savedTheme) {
+            setTheme(savedTheme)
+            document.body.classList.toggle('theme-dark', savedTheme === 'dark');
+        } else {
+            document.body.classList.toggle('theme-dark', theme === 'dark');
+        }
 
-        document.body.classList.toggle('theme-dark', savedTheme === 'dark');
     }, [])
 
     const toggleTheme = () => {
