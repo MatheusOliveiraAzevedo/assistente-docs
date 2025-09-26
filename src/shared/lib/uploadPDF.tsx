@@ -10,6 +10,5 @@ export async function uploadPDF(file: File) {
     });
 
     if (!res.ok) throw new Error("Erro ao enviar o PDF");
-
     return res.json();
 }
