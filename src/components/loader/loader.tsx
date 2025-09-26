@@ -10,7 +10,7 @@ export default function Loader() {
     
     return(
         <>
-            { loadingLoader &&
+            {loadingLoader &&
                 <Backdrop >
                     <Spinner size="w-20 h-20" border="border-4" />
                 </Backdrop>   

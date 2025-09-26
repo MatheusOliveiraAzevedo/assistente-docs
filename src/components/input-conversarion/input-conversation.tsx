@@ -6,6 +6,7 @@ import ButtonDefault from "../button-default/button-default";
 import { useConversation } from "@/shared/useContext/conversationContext";
 import Spinner from "../spinner/spinner";
 import { useLoader } from "@/shared/useContext/loaderContext";
+import { useTheme } from "@/shared/useContext/themeContext";
 
 export default function InputConversation() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -14,9 +15,9 @@ export default function InputConversation() {
     const { setConversation } = useConversation();  
     const [textAreaContent, setTextAreaContent] = useState<string>("");
     const [loadingAI, setLoadingAI] = useState<boolean>(false);
-    const [loadingAttachment, setLoadingAttachment] = useState<boolean>(false);
     const { setLoadingLoader } = useLoader();
     const sendButton = useRef<HTMLButtonElement | null>(null);
+    const { theme } = useTheme();
 
     const handleClick = () => {
         fileInputRef.current?.click();
@@ -85,7 +86,7 @@ export default function InputConversation() {
     }
 
     return (
-        <section className="flex h-[170px] flex-col items-center gap-2 justify-center w-full border-2 border-gray-700 rounded-2xl px-3 py-2">
+        <section className={`flex h-[170px] flex-col items-center gap-2 justify-center w-full border-2 ${theme === "dark" ? "border-gray-700" : "border-gray-700/40"} rounded-2xl px-3 py-2`}>
             <div className="flex flex-row items-center justify-center gap-4  w-full">
                 <TextareaAutosize onKeyDown={hendleKeyDown} onChange={(e) => setTextAreaContent(e.target.value)} value={textAreaContent} className="flex-1 resize-none p-3 focus:outline-none" minRows={4} maxRows={8} placeholder="Digite sua pergunta..."></TextareaAutosize>
                 <div className="flex relative flex-col gap-2 w-[80px] py-3">
@@ -100,7 +101,6 @@ export default function InputConversation() {
                     <input className="hidden" type="file" accept=".pdf" ref={fileInputRef} onChange={handleFileChange}/>
                 </div>
             </div>
-            {loadingAttachment ? <Spinner /> : (file && file.length > 0) && <small className="truncate">{file[0]?.name}</small>}
         </section>
     )
 }
