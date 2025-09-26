@@ -4,6 +4,8 @@ import "./globals.css";
 import MenuTop from "@/components/menu-top/menu-Top";
 import { ThemeProvider } from "@/shared/useContext/themeContext";
 import { ConversationProvider } from "@/shared/useContext/conversationContext";
+import Loader from "@/components/loader/loader";
+import { LoaderProvider } from "@/shared/useContext/loaderContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +32,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          <MenuTop />
-          <ConversationProvider>
-            {children}
-          </ConversationProvider>
-        </ThemeProvider>
+        <LoaderProvider>
+          <Loader />
+          <ThemeProvider>
+            <MenuTop />
+            <ConversationProvider>
+              {children}
+            </ConversationProvider>
+          </ThemeProvider>
+        </LoaderProvider>
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import ButtonDefault from "../button-default/button-default";
 import { useConversation } from "@/shared/useContext/conversationContext";
 import Spinner from "../spinner/spinner";
+import { useLoader } from "@/shared/useContext/loaderContext";
 
 export default function InputConversation() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -14,6 +15,7 @@ export default function InputConversation() {
     const [textAreaContent, setTextAreaContent] = useState<string>("");
     const [loadingAI, setLoadingAI] = useState<boolean>(false);
     const [loadingAttachment, setLoadingAttachment] = useState<boolean>(false);
+    const { setLoadingLoader } = useLoader();
     const sendButton = useRef<HTMLButtonElement | null>(null);
 
     const handleClick = () => {
@@ -21,7 +23,7 @@ export default function InputConversation() {
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLoadingAttachment(true);
+        setLoadingLoader(true);
         if (event.target.files) {
             const newFile: File[] = Array.from(event.target.files)
             setFile(newFile);
@@ -35,15 +37,16 @@ export default function InputConversation() {
             });
 
             if (!res.ok) {
-                const error = await res.text();
-                console.error("Erro ao enviar o arquivo",error);
+                setConversation(prev => [...prev, { role: "error", content: 'Erro ao enviar o arquivo. Envie um documento PDF valido!', time: new Date()}])
+                setLoadingLoader(false);
                 return;
             }
+            setConversation(prev => [...prev, { role: "attachment", content: `Arquivo enviado: ${newFile[0].name}`, time: new Date()}])
 
             const data = await res.json();
             setTextFile(data.text);
         }
-        setLoadingAttachment(false);
+        setLoadingLoader(false);
     }
 
     const handleSend = async () => {
@@ -70,7 +73,7 @@ export default function InputConversation() {
             setConversation(prev => [...prev, { role: "assistant", content: answer, time: new Date() }])
             setLoadingAI(false);
         } else {
-            setConversation(prev => [...prev, { role: "assistant", content: 'Envie um documento PDF para que eu possa responder!', time: new Date()}])
+            setConversation(prev => [...prev, { role: "warning", content: 'Envie um documento PDF para que eu possa responder!', time: new Date()}])
         }
     }
 
@@ -86,7 +89,7 @@ export default function InputConversation() {
             <div className="flex flex-row items-center justify-center gap-4  w-full">
                 <TextareaAutosize onKeyDown={hendleKeyDown} onChange={(e) => setTextAreaContent(e.target.value)} value={textAreaContent} className="flex-1 resize-none p-3 focus:outline-none" minRows={4} maxRows={8} placeholder="Digite sua pergunta..."></TextareaAutosize>
                 <div className="flex relative flex-col gap-2 w-[80px] py-3">
-                    <ButtonDefault ref={sendButton} size="lg" onClick={handleSend}>
+                    <ButtonDefault disabled={loadingAI || !textAreaContent.trim()} ref={sendButton} size="lg" onClick={handleSend}>
                     {loadingAI ?
                         <Spinner />
                         :

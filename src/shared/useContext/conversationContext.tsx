@@ -1,7 +1,7 @@
 "use client"
 import React, { createContext, ReactNode, useContext, useState } from "react";
 
-type RoleType = 'user' | 'assistant'
+type RoleType = 'user' | 'assistant' | 'error' | 'warning' | 'attachment'
 export type ConversationType = {
     role: RoleType,
     content: string,
