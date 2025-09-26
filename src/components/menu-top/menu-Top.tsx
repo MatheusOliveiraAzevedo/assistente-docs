@@ -6,7 +6,7 @@ import { Brain, Moon, Sun } from "lucide-react";
 export default function MenuTop() {
     const { theme, toggleTheme } = useTheme();
     return (
-        <section className="flex flex-row items-center justify-between px-8 py-6 w-full">
+        <section className="flex flex-row items-center justify-between px-8 py-6 h-[100px] w-full">
             <div className="flex flex-row items-center justify-center gap-4">
                 <Brain size={30}/>
                 <h1 className="text-2xl font-bold">DocAI</h1>
