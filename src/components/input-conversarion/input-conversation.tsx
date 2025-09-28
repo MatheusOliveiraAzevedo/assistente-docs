@@ -79,8 +79,8 @@ export default function InputConversation() {
 
     return (
         <section className={`flex h-[170px] flex-col items-center gap-2 justify-center w-full border-2 ${theme === "dark" ? "border-gray-700" : "border-gray-700/40"} rounded-2xl px-3 py-2`}>
-            <div className="flex flex-row items-center justify-center gap-4  w-full">
-                <TextareaAutosize onKeyDown={hendleKeyDown} onChange={(e) => setTextAreaContent(e.target.value)} value={textAreaContent} className="flex-1 resize-none p-3 focus:outline-none" minRows={4} maxRows={8} placeholder="Digite sua pergunta..."></TextareaAutosize>
+            <div className="flex flex-row items-center justify-center gap-4  w-full overflow-hidden">
+                <TextareaAutosize onKeyDown={hendleKeyDown} onChange={(e) => setTextAreaContent(e.target.value)} value={textAreaContent} className="flex-1 resize-none p-3 focus:outline-none" minRows={4} maxRows={5} placeholder="Digite sua pergunta..."></TextareaAutosize>
                 <div className="flex relative flex-col gap-2 w-[80px] py-3">
                     <ButtonDefault disabled={loadingAI || !textAreaContent.trim()} ref={sendButton} onClick={handleSend} circle tooltip="Enviar">
                     {loadingAI ?
