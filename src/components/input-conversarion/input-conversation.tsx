@@ -8,6 +8,7 @@ import Spinner from "../spinner/spinner";
 import { useLoader } from "@/shared/useContext/loaderContext";
 import { useTheme } from "@/shared/useContext/themeContext";
 import { uploadPDF } from "@/shared/lib/uploadPDF";
+import { Paperclip, Send } from "lucide-react";
 
 export default function InputConversation() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -81,14 +82,14 @@ export default function InputConversation() {
             <div className="flex flex-row items-center justify-center gap-4  w-full">
                 <TextareaAutosize onKeyDown={hendleKeyDown} onChange={(e) => setTextAreaContent(e.target.value)} value={textAreaContent} className="flex-1 resize-none p-3 focus:outline-none" minRows={4} maxRows={8} placeholder="Digite sua pergunta..."></TextareaAutosize>
                 <div className="flex relative flex-col gap-2 w-[80px] py-3">
-                    <ButtonDefault disabled={loadingAI || !textAreaContent.trim()} ref={sendButton} size="lg" onClick={handleSend}>
+                    <ButtonDefault disabled={loadingAI || !textAreaContent.trim()} ref={sendButton} onClick={handleSend} circle tooltip="Enviar">
                     {loadingAI ?
                         <Spinner />
                         :
-                        "Enviar"
+                        <Send size={28}/>
                     }
                         </ButtonDefault>
-                    <ButtonDefault size="lg" type="secondary" onClick={handleClick}>Anexo</ButtonDefault>
+                    <ButtonDefault circle type="secondary" onClick={handleClick}><Paperclip size={28}/></ButtonDefault>
                     <input className="hidden" type="file" accept=".pdf" ref={fileInputRef} onChange={handleFileChange}/>
                 </div>
             </div>
