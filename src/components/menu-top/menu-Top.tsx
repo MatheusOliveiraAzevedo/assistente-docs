@@ -3,12 +3,17 @@
 import { useTheme } from "@/shared/useContext/themeContext";
 import { Box, Modal } from "@mui/material";
 import { Brain, CircleQuestionMark, Moon, Sun } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonDefault from "../button-default/button-default";
 
 export default function MenuTop() {
     const { theme, toggleTheme } = useTheme();
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        setOpen(true);
+    }, [])
+
     return (
         <div className="flex flex-col justify-center items-center bg-[var(--background)] h-[100px] w-full shadow-lg sticky top-0 left-0">
             <section className="flex flex-row items-center justify-between px-8 py-6 w-full containtment">
