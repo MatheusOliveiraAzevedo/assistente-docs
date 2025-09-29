@@ -47,6 +47,7 @@ export default function InputConversation() {
                 setTextFile(res.text);
                 setConversation(prev => [...prev, { role: "attachment", content: `Arquivo enviado: ${newFile[0].name}`, time: new Date()}])
             } catch (error) {
+                console.error("Erro ao enviar o arquivo",error);
                 setConversation(prev => [...prev, { role: "error", content: 'Erro ao enviar o arquivo. Envie um documento PDF valido!', time: new Date()}])
                 setLoadingLoader(false);
             }

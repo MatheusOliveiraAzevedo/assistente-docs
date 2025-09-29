@@ -12,8 +12,7 @@ export default function CardConversation() {
     }, [conversation]);
 
     return (
-        <section className="flex flex-1 flex-col gap-9 p-3 sm:p-6 overflow-y-auto rounded-2xl" id="container-conversarion">
-            <span className="text-lg text-center">Envie seu documento, e o Assistente irá responder!</span>
+        <section className="flex flex-1 flex-col gap-9 p-3 pt-10 sm:p-6 sm:pt-24 overflow-y-auto rounded-2xl" id="container-conversarion">
             {conversation.map((item, index) => (
                 <div key={index} className={`flex ${item.role === "error" || item.role === "warning" || item.role === "attachment" ? "flex.row" : "flex-col"} gap-3 ${item.role === "user" ? "self-end items-end" : "self-start items-center"} `}>
                     <div className={`flex flex-col gap-1 px-6 py-2 ${item.role === "user" ? "bg-blue-500 text-white rounded-4xl" : item.role === "error" ? "bg-red-500/10 text-red-400 rounded-4xl" : item.role === "warning" ? "bg-yellow-500/10 text-yellow-600 rounded-4xl" : item.role === "attachment" ? "bg-green-500/10 text-green-600 rounded-lg" :""} `}>
