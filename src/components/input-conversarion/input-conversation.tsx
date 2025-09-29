@@ -9,6 +9,7 @@ import { useLoader } from "@/shared/useContext/loaderContext";
 import { useTheme } from "@/shared/useContext/themeContext";
 import { uploadPDF } from "@/shared/lib/uploadPDF";
 import { Paperclip, Send } from "lucide-react";
+import { supabase } from "@/shared/lib/superbaseClient";
 
 export default function InputConversation() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -31,7 +32,18 @@ export default function InputConversation() {
             const newFile: File[] = Array.from(event.target.files)
             setFile(newFile);
             try {
-                const res = await uploadPDF(newFile[0])
+
+                const { data, error } = await supabase.storage
+                    .from('Docs')
+                    .upload(`uploads/${Date.now()}-${newFile[0].name}`, newFile[0]);
+
+                if (error) {
+                    setConversation(prev => [...prev, { role: "error", content: 'Erro ao enviar o arquivo. Envie um documento PDF valido!', time: new Date()}])
+                    setLoadingLoader(false);
+                    return
+                }
+
+                const res = await uploadPDF(data.path)
                 setTextFile(res.text);
                 setConversation(prev => [...prev, { role: "attachment", content: `Arquivo enviado: ${newFile[0].name}`, time: new Date()}])
             } catch (error) {
@@ -62,7 +74,6 @@ export default function InputConversation() {
             }
 
             const { answer } = await res.json();
-            console.log("Resposta",answer);
             setConversation(prev => [...prev, { role: "assistant", content: answer, time: new Date() }])
             setLoadingAI(false);
         } else {

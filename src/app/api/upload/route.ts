@@ -1,28 +1,34 @@
 // @ts-expect-error: pdf-parse não fornece tipagem oficial em TS
 import pdf from "pdf-parse/lib/pdf-parse.js";
 import { NextResponse } from 'next/server';
+import { supabase } from "@/shared/lib/superbaseClient";
 export const runtime = "nodejs";
 
 
 export async function POST(req: Request) {
     try {
-        const formData = await req.formData();
-        const file = formData.get('file') as File;
+        const { path } = await req.json();
     
-        if (!file) {
-            return new Response('No file uploaded', { status: 400 });
-        }
+        if (!path) return new Response('No file uploaded', { status: 400 });
     
-        const arrayBuffer = await file.arrayBuffer();
+        const { data, error } = await supabase.storage
+            .from('Docs')
+            .download(path);
+
+        if (error) return new Response('No file uploaded ' + error.message, { status: 400 });
         
-        const buffer = Buffer.from(arrayBuffer);
+        const buffer = Buffer.from(await data.arrayBuffer());
     
-        const data = await pdf(buffer)
+        const pdfData = await pdf(buffer)
+
+        await supabase.storage
+            .from('Docs')
+            .remove([path]);
     
         return NextResponse.json({
-            text: data.text,
-            pages: data.numPages,
-            info: data.info
+            text: pdfData.text,
+            pages: pdfData.numPages,
+            info: pdfData.info
         })
     } catch (error: unknown) {
         if (error instanceof Error) {

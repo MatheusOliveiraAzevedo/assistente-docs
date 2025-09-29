@@ -1,12 +1,11 @@
 
 
-export async function uploadPDF(file: File) {
-    const formData = new FormData();
-    formData.append('file', file);
+export async function uploadPDF(filePath: string) {
 
     const res = await fetch(`/api/upload`, {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: filePath})
     });
 
     if (!res.ok) throw new Error("Erro ao enviar o PDF");
