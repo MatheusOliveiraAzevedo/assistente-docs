@@ -40,5 +40,7 @@ Você vera na tela a resposta do assistente escrita no campo logo acima do input
 
 - React.js
 - Next.js
-- Tailwind CSS
 - TypeScript
+- Tailwind CSS
+- OpenAI API
+- Supabase
