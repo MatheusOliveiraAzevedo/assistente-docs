@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     try {
         const { question, docText } = await req.json();
 
-        let textEdit = truncateTextTokens(docText);
+        const textEdit = truncateTextTokens(docText);
 
         const response = await openAi.chat.completions.create({
             model: modelOpenAI,
