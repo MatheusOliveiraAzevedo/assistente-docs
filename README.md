@@ -15,7 +15,10 @@ Projeto construido para facilitar a extração de informações de PDFs, princip
 
 [Visualizar o projeto!](https://assistente-docs.vercel.app/)
 
-![Previa do DocAI](public/assets/screenshot.png)
+<p float="left">
+  <img src="public/assets/screenshot.png" width="70%" />
+  <img src="public/assets/screenshot2.png" width="20%" />
+</p>
 
 ## Instalação
 
