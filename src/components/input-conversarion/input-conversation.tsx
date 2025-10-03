@@ -13,7 +13,7 @@ import { supabase } from "@/shared/lib/superbaseClient";
 
 export default function InputConversation() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [file, setFile] = useState<File[] | null>(null);
+    const [fileRecived, setFileRecived] = useState<boolean>(false);
     const [textFile, setTextFile] = useState<string>("");
     const { setConversation } = useConversation();  
     const [textAreaContent, setTextAreaContent] = useState<string>("");
@@ -28,9 +28,15 @@ export default function InputConversation() {
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setLoadingLoader(true);
-        if (event.target.files) {
+        if (event.target.files && event.target.files.length > 0) {
             const newFile: File[] = Array.from(event.target.files)
-            setFile(newFile);
+            if (newFile[0].size > 10 * 1024 * 1024) {
+                setConversation(prev => [...prev, { role: "error", content: 'O arquivo enviado deve ter menos de 10MB', time: new Date()}])
+                setLoadingLoader(false);
+                return
+            }
+
+            setFileRecived(true);
             try {
 
                 const { data, error } = await supabase.storage
@@ -48,6 +54,7 @@ export default function InputConversation() {
                 setConversation(prev => [...prev, { role: "attachment", content: `Arquivo enviado: ${newFile[0].name}`, time: new Date()}])
             } catch (error) {
                 console.error("Erro ao enviar o arquivo",error);
+                setFileRecived(false);
                 setConversation(prev => [...prev, { role: "error", content: 'Erro ao enviar o arquivo. Envie um documento PDF valido!', time: new Date()}])
                 setLoadingLoader(false);
             }
@@ -56,7 +63,7 @@ export default function InputConversation() {
     }
 
     const handleSend = async () => {
-        if (file && textFile !== "") {
+        if (fileRecived && textFile !== "") {
             setLoadingAI(true);
             setConversation(prev => [...prev, { role: "user", content: textAreaContent, time: new Date() }])
             setTextAreaContent("");
@@ -71,6 +78,8 @@ export default function InputConversation() {
             if (!res.ok) {
                 const error = await res.text();
                 console.error("Erro ao enviar o arquivo",error);
+                setConversation(prev => [...prev, { role: "error", content: 'Estamos com problemas na comunicação com o servidor, tente novamente mais tarde!', time: new Date()}])
+                setLoadingAI(false);
                 return;
             }
 
@@ -92,11 +101,11 @@ export default function InputConversation() {
     return (
         <section className={`flex h-[170px] flex-col items-center gap-2 justify-center w-full border-2 ${theme === "dark" ? "border-gray-700" : "border-gray-700/40"} rounded-2xl px-3 py-2`}>
             <div className="flex flex-row items-center justify-center gap-4  w-full overflow-hidden">
-                <TextareaAutosize onKeyDown={hendleKeyDown} onChange={(e) => setTextAreaContent(e.target.value)} value={textAreaContent} className="flex-1 resize-none p-3 focus:outline-none" minRows={4} maxRows={5} placeholder="Digite sua pergunta..."></TextareaAutosize>
+                <TextareaAutosize onKeyDown={hendleKeyDown} onClick={fileRecived ? undefined : handleClick } onChange={(e) => setTextAreaContent(e.target.value)} value={textAreaContent} className="flex-1 resize-none p-3 focus:outline-none" minRows={4} maxRows={5} placeholder={fileRecived ? "Digite sua pergunta..." : "Envie um documento PDF para que eu possa responder!"}></TextareaAutosize>
                 <div className="flex relative flex-col gap-2 w-[80px] py-3">
-                    <ButtonDefault disabled={loadingAI || !textAreaContent.trim()} ref={sendButton} onClick={handleSend} circle tooltip="Enviar">
+                    <ButtonDefault disabled={loadingAI || !textAreaContent.trim()} ref={sendButton} onClick={handleSend} circle tooltip="Enviar" type={loadingAI ? "warning" : "primary"}>
                     {loadingAI ?
-                        <Spinner />
+                        <Spinner size="w-6 h-6" />
                         :
                         <Send size={28}/>
                     }

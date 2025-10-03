@@ -2,7 +2,7 @@ import { forwardRef, type ReactNode } from "react"
 
 type ButtonDefaultProps = {
     children: ReactNode,
-    type?: 'primary' | 'secondary',
+    type?: 'primary' | 'secondary' | 'warning',
     size?: 'sm' | 'lg',
     onClick?: () => void,
     disabled?: boolean,
@@ -11,7 +11,7 @@ type ButtonDefaultProps = {
 }
 
 function ButtonDefaultBase( { children, type='primary', size='sm', onClick, disabled, circle = false, tooltip="" }: ButtonDefaultProps, ref: React.Ref<HTMLButtonElement> ) {
-    const color = type === 'primary' ? 'bg-blue-700 active:bg-blue-400 hover:bg-blue-900' : 'bg-gray-600 active:bg-gray-400 hover:bg-gray-800'
+    const color = type === 'primary' ? 'bg-blue-700 active:bg-blue-400 hover:bg-blue-900' : type === 'secondary' ? 'bg-gray-600 active:bg-gray-400 hover:bg-gray-800' : 'bg-yellow-600 active:bg-yellow-600 hover:bg-yellow-600'
     const sizeButton = size === 'sm' ? 'w-auto' : 'w-full'
     const bordersButton = circle ? 'rounded-full p-4' : 'rounded-xl px-4 py-2'
     return(

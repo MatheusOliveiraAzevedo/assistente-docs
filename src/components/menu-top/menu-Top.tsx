@@ -5,6 +5,7 @@ import { Box, Modal } from "@mui/material";
 import { Brain, CircleQuestionMark, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import ButtonDefault from "../button-default/button-default";
+import pkg from "../../../package.json";
 
 export default function MenuTop() {
     const { theme, toggleTheme } = useTheme();
@@ -33,10 +34,13 @@ export default function MenuTop() {
 
             <Modal open={open} onClose={() => setOpen(false)} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[var(--background)] border-0 shadow-2xl rounded-2xl p-6 w-7/8 lg:w-1/2 focus:outline-none flex flex-col gap-4">
-                    <h1 className="text-xl font-bold">Bem-vindo ao DocAI!</h1>
+                    <span className="flex flex-row justify-between gap-1">
+                        <h1 className="text-xl font-bold">Bem-vindo ao DocAI!</h1>
+                        <small>Versão {pkg.version}</small>
+                    </span>
                     <span>O DocAI é um assistente inteligente projetado para facilitar a interação com documentos. Com ele, você pode:</span>
                     <ul className="flex flex-col gap-1">
-                        <li>•	Fazer perguntas sobre qualquer documento PDF carregado, obtendo respostas rápidas e precisas.</li>
+                        <li>•	Fazer perguntas sobre qualquer documento PDF de até <strong className="text-blue-500 text-xl">10MB</strong>, obtendo respostas rápidas e precisas.</li>
                         <li>•	Explorar informações importantes sem precisar ler o documento inteiro.</li>
                         <li>•	Ganhar produtividade ao organizar e acessar conteúdo relevante em segundos.</li>
                     </ul>
